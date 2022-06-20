@@ -1,21 +1,20 @@
 package models
 
 type User struct {
-	Name string
+	Name  string
 	Email string
 }
 
 type userPayload struct {
-	Name string
-	Email string
-	Tag string `default:"user"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Tag   string `default:"user" json:"tag"`
 }
 
 func NewUserPayload(name string, email string) userPayload {
 	return userPayload{
-		Name: name,
+		Name:  name,
 		Email: email,
-		Tag: "user",
+		Tag:   "user",
 	}
 }
-

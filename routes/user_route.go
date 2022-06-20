@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"producer/models"
 
 	"github.com/gin-gonic/gin"
@@ -13,10 +14,10 @@ import (
 
 const POST_USER_ROUTE = "/produce/user"
 
-var rabbitHost = "localhost"
-var rabbitPort = "5672"
-var rabbitUsername = "guest"
-var rabbitPassword = "guest"
+var rabbitHost = os.Getenv("RABBIT_HOST")
+var rabbitPort = os.Getenv("RABBIT_PORT")
+var rabbitUsername = os.Getenv("RABBIT_USER")
+var rabbitPassword = os.Getenv("RABBIT_PASS")
 
 func PostUser(context *gin.Context) {
 	log.Println("Invoked post user endpoint.")
