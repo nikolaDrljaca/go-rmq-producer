@@ -59,10 +59,7 @@ func PostUser(context *gin.Context) {
 		log.Fatalf("%s: %s", "Failed to create queue", err)
 	}
 
-	userPayload, err := json.Marshal(models.UserPayload{
-		Name:  user.Name,
-		Email: user.Email,
-	})
+	userPayload, err := json.Marshal(models.NewUserPayload(user.Name, user.Email))
 
 	if err != nil {
 		log.Println("Failed to parse payload as JSON.")
