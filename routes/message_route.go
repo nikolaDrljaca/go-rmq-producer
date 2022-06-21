@@ -11,28 +11,17 @@ import (
 	"github.com/rabbitmq/amqp091-go"
 )
 
-const POST_USER_ROUTE = "/produce/user"
+const MESSAGE_POST_ROUTE = "/produce/msg"
 
-// var rabbitHost = os.Getenv("RABBIT_HOST")
-// var rabbitPort = os.Getenv("RABBIT_PORT")
-// var rabbitUsername = os.Getenv("RABBIT_USER")
-// var rabbitPassword = os.Getenv("RABBIT_PASS")
-
-//for local testing
-var rabbitHost = "localhost"
-var rabbitPort = "5672"
-var rabbitUsername = "guest"
-var rabbitPassword = "guest"
-
-func PostUser(context *gin.Context) {
+func PostMessage(context *gin.Context) {
 	log.Println("Invoked post user endpoint.")
 
-	var user models.User
+	var message models.Message
 
-	if err := context.BindJSON(&user); err != nil {
+	if err := context.BindJSON(&message); err != nil {
 		log.Println(err)
 	}
-	log.Printf("Payload: %v", user)
+	log.Printf("Payload: %v", message)
 
 	connLink := fmt.Sprintf("amqp://%v:%v@%v:%v/", rabbitUsername, rabbitPassword, rabbitHost, rabbitPort)
 
@@ -65,7 +54,7 @@ func PostUser(context *gin.Context) {
 		log.Fatalf("%s: %s", "Failed to create queue", err)
 	}
 
-	userPayload, err := json.Marshal(models.NewUserPayload(user.Name, user.Email))
+	msgPayload, err := json.Marshal(models.NewMessagePayload(message.Content, message.UID))
 
 	if err != nil {
 		log.Println("Failed to parse payload as JSON.")
@@ -78,7 +67,7 @@ func PostUser(context *gin.Context) {
 		false,      //immediate
 		amqp091.Publishing{
 			ContentType: "application/json",
-			Body:        userPayload,
+			Body:        msgPayload,
 		},
 	)
 

@@ -16,6 +16,7 @@ func main() {
 	})
 
 	r.POST(routes.POST_USER_ROUTE, routes.PostUser)
+	r.POST(routes.MESSAGE_POST_ROUTE, routes.PostMessage)
 
 	r.Run(":80") // listen and serve on 0.0.0.0:8080
 
